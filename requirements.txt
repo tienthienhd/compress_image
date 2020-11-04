@@ -1,0 +1,4 @@
+Pillow
+ImageHash
+Werkzeug==1.0.1
+Flask
