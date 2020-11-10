@@ -2,4 +2,4 @@ Pillow
 ImageHash
 Werkzeug==0.16.1
 Flask
-flask_restfull
+Flask_RESTful
