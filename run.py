@@ -1,5 +1,6 @@
 import logging
-
+from flask_eureka import Eureka
+from flask_eureka.eureka import eureka_bp
 from flask import Flask, request, send_from_directory, jsonify, send_file
 from flask_restful import reqparse, Resource, Api
 from werkzeug.datastructures import FileStorage
@@ -10,6 +11,16 @@ LOGGER = logging.getLogger()
 
 flask_app = Flask(__name__, static_folder='web/base/static')
 api = Api(flask_app)
+
+
+flask_app.register_blueprint(eureka_bp)
+flask_app.config["SERVICE_NAME"] = "image-utils"
+flask_app.config["EUREKA_SERVICE_URL"] = "http://internal-interal-eureka-elb-1725501689.ap-southeast-1.elb.amazonaws.com/"
+flask_app.config["EUREKA_INSTANCE_PORT"] = 15001
+flask_app.config["EUREKA_INSTANCE_HOSTNAME"] = "172.16.10.111"
+flask_app.config["EUREKA_HEARTBEAT"] = 60
+eureka = Eureka(flask_app)
+eureka.register_service(name="image-utils", vip_address="image-utils")
 
 
 class CompressImageApi(Resource):
