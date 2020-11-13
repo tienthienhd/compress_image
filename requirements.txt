@@ -1,7 +1,1 @@
 Pillow
-ImageHash
-Werkzeug==0.16.1
-Flask
-Flask_RESTful
-flask_eureka==0.1.0
-uwsgi
