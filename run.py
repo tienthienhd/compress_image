@@ -15,12 +15,17 @@ api = Api(flask_app)
 
 flask_app.register_blueprint(eureka_bp)
 flask_app.config["SERVICE_NAME"] = "image-utils"
-flask_app.config["EUREKA_SERVICE_URL"] = "http://internal-interal-eureka-elb-1725501689.ap-southeast-1.elb.amazonaws.com/"
+flask_app.config["EUREKA_SERVICE_URL"] = "http://172.16.10.111:8761"
 flask_app.config["EUREKA_INSTANCE_PORT"] = 15001
 flask_app.config["EUREKA_INSTANCE_HOSTNAME"] = "172.16.10.111"
 flask_app.config["EUREKA_HEARTBEAT"] = 60
 eureka = Eureka(flask_app)
 eureka.register_service(name="image-utils", vip_address="image-utils")
+
+
+@flask_app.route('/health_check')
+def health_check():
+    return str(0)
 
 
 class CompressImageApi(Resource):
