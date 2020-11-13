@@ -1,15 +1,12 @@
 import argparse
-import functools
 import os
-import time
 
 from PIL import Image
-
 
 BASE_DIM = 2000
 
 
-def compress_image(input_path: str, output_path) -> str:
+def compress_image(input_path: str, output_path: str, quality: int = 95) -> str:
     img = Image.open(input_path)
 
     w, h = img.size
@@ -19,7 +16,11 @@ def compress_image(input_path: str, output_path) -> str:
         new_w, new_h = int(scale * w), int(scale * h)
         img = img.resize((new_w, new_h), Image.ANTIALIAS)
     img = img.convert('RGB')
-    img.save(output_path, "jpeg", optimize=True, quality=95)
+    if 20 < quality < 100:
+        pass
+    else:
+        quality = 95
+    img.save(output_path, "jpeg", optimize=True, quality=quality)
     return output_path
 
 
@@ -27,6 +28,8 @@ def main():
     parser = argparse.ArgumentParser(description="Compress Image Tool")
     parser.add_argument("--input", "-i", required=True, help="Đường dẫn đến ảnh đầu vào.")
     parser.add_argument("--output", "-o", help="Đường dẫn lưu ảnh đầu ra.")
+    parser.add_argument("--quality", "-q", required=False, default=95, type=int,
+                        help="Chất lượng ảnh đầu ra. Gía trị int trong khoảng 20 - 100", )
     args = parser.parse_args()
 
     file_path = args.input
@@ -38,4 +41,4 @@ def main():
     if output_path is None:
         output_path = os.path.join(input_dir, file_id + "_compressed.jpg")
 
-    return compress_image(file_path, output_path)
+    return compress_image(file_path, output_path, args.quality)
